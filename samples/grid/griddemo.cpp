@@ -623,6 +623,66 @@ GridFrame::GridFrame()
     grid->SetAttr(11, 11, new wxGridCellAttr);
     grid->SetAttr(11, 11, NULL);
 
+    int startRow = 17;
+    const std::string text = "Very long test string";
+    for (int i = 0; i < 6; ++i) // block
+    {
+        int baseRow = startRow + i * 4;
+        wxGridFitMode fitMode;
+        std::string caption;
+        switch (i)
+        {
+        case 0:
+            fitMode = wxGridFitMode::Clip();
+            caption = "wxGridFitMode::Clip()";
+            break;
+        case 1:
+            fitMode = wxGridFitMode::Overflow();
+            caption = "wxGridFitMode::Overflow()";
+            break;
+        case 2:
+            fitMode = wxGridFitMode::Ellipsize(wxELLIPSIZE_NONE);
+            caption = "wxGridFitMode::Ellipsize(wxELLIPSIZE_NONE)";
+            break;
+        case 3:
+            fitMode = wxGridFitMode::Ellipsize(wxELLIPSIZE_START);
+            caption = "wxGridFitMode::Ellipsize(wxELLIPSIZE_START)";
+            break;
+        case 4:
+            fitMode = wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE);
+            caption = "wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE)";
+            break;
+        case 5:
+            fitMode = wxGridFitMode::Ellipsize(wxELLIPSIZE_END);
+            caption = "wxGridFitMode::Ellipsize(wxELLIPSIZE_END)";
+            break;
+        }
+        grid->SetCellValue(baseRow, 0, caption);
+
+        for (int j = 0; j < 3; ++j) // row
+        {
+            for (int k = 0; k < 3; ++k) // col
+            {
+                int row = baseRow + j;
+                int col = k + 1;
+                int horiz = (k == 0) ? wxALIGN_LEFT : ((k == 1) ? wxALIGN_CENTER : wxALIGN_RIGHT);
+                int vert = (j == 0) ? wxALIGN_TOP : ((j == 1) ? wxALIGN_CENTER : wxALIGN_BOTTOM);
+
+                grid->SetCellValue(row, col, text);
+                grid->SetCellAlignment(row, col, horiz, vert);
+                grid->SetRowSize(row, 28);
+                grid->SetCellFitMode(row, col, fitMode);
+            }
+        }
+    }
+    grid->MakeCellVisible(24, 0);
+
+    //grid->SetColLabelTextOrientation(wxVERTICAL);
+    grid->SetColLabelValue(0, "First column\n2nd");
+    grid->SetColLabelValue(1, "Second column\n2nd");
+    grid->SetColLabelValue(2, "Third column\n2nd");
+    grid->SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_TOP);
+
     grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
