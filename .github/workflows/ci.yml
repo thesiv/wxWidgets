@@ -23,6 +23,17 @@ jobs:
             gtk_version: 3
             skip_samples: true
             use_asan: true
+          - name: wxGTK Ubuntu 20.04 GUI tests
+            runner: ubuntu-20.04
+            compiler: gcc
+            configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
+            gtk_version: 3
+            use_xvfb: true
+          - name: wxGTK Ubuntu 18.04 with clang
+            runner: ubuntu-18.04
+            compiler: clang
+            configure_flags: --disable-shared --disable-sys-libs --disable-webview
+            gtk_version: 2
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version }}
       wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
